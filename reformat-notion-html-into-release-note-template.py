@@ -60,7 +60,7 @@ def restructure_body_add_header_footer_and_wrap(html_file):
     # Header HTML
     header = BeautifulSoup("""
     <header style="margin-bottom: 60px; text-align: center">
-        
+
       <p style="color: lightgrey; font-family: sans-serif; font-weight: bold">THE TECH TEAM</p>
     <br>
 
@@ -110,6 +110,9 @@ def process_images_and_update_src(soup, base_directory):
     """
     Process images: rename files, move them, and update <img> tags.
     """
+
+    renamed_files = {}
+
     print("\n--- Starting Image Processing ---")
     for tag in soup.find_all("img", src=True):
         original_src = tag['src']
@@ -126,24 +129,27 @@ def process_images_and_update_src(soup, base_directory):
         src_directory, src_filename = os.path.split(decoded_src)
         original_image_path = os.path.join(base_directory, decoded_src)  # Use decoded path
 
-        # Skip if the file doesn't exist
-        if not os.path.exists(original_image_path):
-            print(f"Image file not found, skipping: {original_image_path}")
-            continue
+        # Check if this file was already renamed
+        if original_image_path in renamed_files:
+            new_image_name = renamed_files[original_image_path]
+            print(f"Using cached renamed file for: {original_image_path}")
+        else:
+            # Generate a new UUID-based filename
+            new_image_uuid = str(uuid.uuid4())
+            file_ext = os.path.splitext(src_filename)[1]
+            new_image_name = f"{new_image_uuid}{file_ext}"
 
-        # Generate a new UUID-based filename
-        new_image_uuid = str(uuid.uuid4())
-        file_ext = os.path.splitext(src_filename)[1]
-        new_image_name = f"{new_image_uuid}{file_ext}"
+            # Build the new image path in the same folder as the original image
+            new_image_directory = os.path.join(base_directory, src_directory)
+            os.makedirs(new_image_directory, exist_ok=True)  # Ensure the directory exists
+            new_image_path = os.path.join(new_image_directory, new_image_name)
 
-        # Build the new image path in the same folder as the original image
-        new_image_directory = os.path.join(base_directory, src_directory)
-        os.makedirs(new_image_directory, exist_ok=True)  # Ensure the directory exists
-        new_image_path = os.path.join(new_image_directory, new_image_name)
+            # Move the image to the new path
+            shutil.move(original_image_path, new_image_path)
+            print(f"Renamed and moved: '{original_image_path}' -> '{new_image_path}'")
 
-        # Move the image to the new path
-        shutil.move(original_image_path, new_image_path)
-        print(f"Renamed and moved: '{original_image_path}' -> '{new_image_path}'")
+            # Cache the renamed file
+            renamed_files[original_image_path] = new_image_name
 
         # Update the <img> tag src attribute
         new_src = f"{s3_bucket_base_url}/{new_image_name}"
@@ -155,6 +161,7 @@ def process_images_and_update_src(soup, base_directory):
         if parent_a_tag and 'href' in parent_a_tag.attrs:
             parent_a_tag['href'] = new_src
             print(f"Updated parent <a> href: {new_src}")
+
     print("--- Image Processing Complete ---\n")
 
 
