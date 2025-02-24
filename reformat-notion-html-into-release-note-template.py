@@ -201,6 +201,16 @@ def save_html_to_file(soup, html_file):
         file.write(soup.prettify())
     print(f"HTML file successfully saved: {html_file}")
 
+def remove_header_inside_main(soup):
+
+    main_element = soup.find('main')
+    if main_element:
+        header_element = main_element.find('header')
+        if header_element:
+            header_element.decompose()
+
+
+
 def main():
     """
     Main function to coordinate all operations.
@@ -224,6 +234,9 @@ def main():
 
     # Step 3: Update image widths inside <main>
     set_image_width_inside_main(soup)
+
+    # Step 4: Remove <header> component inside the <main> component
+    remove_header_inside_main(soup)
 
     # Step 4: Save the updated HTML
     save_html_to_file(soup, filename)
