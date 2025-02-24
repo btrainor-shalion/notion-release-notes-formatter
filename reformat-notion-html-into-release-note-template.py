@@ -40,7 +40,7 @@ def get_base_directory(filename):
     print(f"Base directory determined: {base_directory}")
     return base_directory
 
-def restructure_body_add_header_footer_and_wrap(html_file):
+def restructure_html(html_file):
     """
     Replace <body> with <main>, add a header and footer, and wrap content in a styled div.
     """
@@ -52,6 +52,12 @@ def restructure_body_add_header_footer_and_wrap(html_file):
     if not body:
         print("No <body> element found. Exiting restructuring.")
         return soup
+
+    head_tag = soup.head
+    if head_tag:
+        print("Remove <head> tag.")
+        head_tag.decompose()
+
 
     # Rename body to <main>
     main = soup.new_tag("main")
@@ -101,6 +107,13 @@ def restructure_body_add_header_footer_and_wrap(html_file):
 
     # Replace <body> with the wrapper div
     body.replace_with(wrapper_div)
+
+    # 4. Replace top-level <html> with the <div> containing <main>
+    html_tag = soup.html
+    if html_tag:
+        # Extract the new <div> (which already contains <main>)
+        new_div = soup.div.extract()
+        html_tag.replace_with(new_div)
 
     print("Body successfully replaced with <main> and wrapped with a styled <div>.")
     return soup
@@ -204,7 +217,7 @@ def main():
     with open(filename, 'r', encoding='utf-8') as file:
         soup = BeautifulSoup(file, 'html.parser')
 
-    soup = restructure_body_add_header_footer_and_wrap(filename)
+    soup = restructure_html(filename)
 
     # Step 2: Process images (rename and update src)
     process_images_and_update_src(soup, base_directory)
