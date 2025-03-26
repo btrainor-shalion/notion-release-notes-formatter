@@ -86,6 +86,22 @@ def restructure_html(html_file):
   <hr style="background-color: #f2f2f2; border-radius: 16px; display: block; height: 2px; margin: 0 auto; margin-top: 32px; margin-bottom: 64px; width: 100px; text-align: center;">
   <p>As always, if you have any questions or concerns regarding these changes please let us know by responding to this email or through the usual channels.</p>
   <br>
+
+  <figure class="image" id="1c156175-e181-8048-b18d-dda28f2b9c0b" style="text-align: center">
+      <img src="https://d3cf387e7yjscm.cloudfront.net/tech-support-channel-banner.png" style="width: 40%"/>
+  </figure>
+  <br>
+
+  <p class="" id="1c156175-e181-80d9-8659-f7936966b289">
+     For any other support requests, feature requests, or bug reports, please submit a ticket through our
+     <strong>
+      <a href="https://app.clickup.com/6618384/v/fm/69z8g-41794">
+       support channel on ClickUp
+      </a>
+     </strong>
+     . This helps us better organize our work and ensure a timely response. 🚀
+    </p>
+  <br>
   <br>
   <p><strong>THE TECH TEAM</strong></p>
   <br>
