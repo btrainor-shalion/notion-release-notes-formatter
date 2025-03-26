@@ -1,13 +1,9 @@
 # Notion release notes formatter
 
-A Python script to format Notion HTML exports for email-friendly release notes.
+This script formats an **HTML file exported from Notion** to make it suitable for email distribution. It performs the following tasks:
 
-This script basically takes an HTML file exported from Notion, adds a header and footer and renames image URLs.
-
-This script processes an HTML file exported from Notion by:
-
-1. **Adding a header and footer** for consistency and branding.
-2. **Renaming image URLs** to facilitate direct insertion into an email body.
+- ✅ Adds a header and footer for consistent formatting and branding.
+- ✅ Renames image URLs to allow direct insertion into an email body.
 
 ⚠️ **Important Manual Step**
 
